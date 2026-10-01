@@ -27,7 +27,8 @@ if o.shell_succeeds(o.shell_quote(nvidia)) then
   if pipe then
     local card = (pipe:read("*a") or ""):match("^(/dev/dri/card%d+)")
     pipe:close()
-    if card then
+    -- An AQ_DRM_DEVICES the user set themselves wins.
+    if card and (os.getenv("AQ_DRM_DEVICES") or "") == "" then
       hl.env("AQ_DRM_DEVICES", card)
     end
   end
