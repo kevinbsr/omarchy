@@ -69,6 +69,7 @@ assert_card "no DRM cards at all keeps autodetection" ""
 
 # The session and greeter configs, run for real against the fake DRM tree and a
 # fake NVIDIA PCI device; only Hyprland's AQ_DRM_DEVICES call is captured.
+unset AQ_DRM_DEVICES
 mkdir -p "$tmp_dir/pci/0"
 printf '0x10de\n' >"$tmp_dir/pci/0/vendor"
 printf '0x1f91\n' >"$tmp_dir/pci/0/device"
