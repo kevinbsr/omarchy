@@ -48,6 +48,9 @@ assert_card "NVIDIA alone keeps autodetection" ""
 write_drm card0:simple-framebuffer card1:amdgpu card2:nvidia
 assert_card "a hybrid machine keeps autodetection" ""
 
+write_drm card0:simple-framebuffer card1:nvidia card2:nvidia
+assert_card "two NVIDIA cards keep autodetection" ""
+
 write_drm card0:amdgpu card1:nvidia
 assert_card "a hybrid machine without a firmware framebuffer keeps autodetection" ""
 
