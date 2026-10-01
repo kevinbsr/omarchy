@@ -11,7 +11,8 @@ do
     omarchy_path = "/usr/share/omarchy"
   end
 
-  local pipe = io.popen("'" .. omarchy_path .. "/bin/omarchy-hw-nvidia-drm-card' 2>/dev/null")
+  local detector = omarchy_path .. "/bin/omarchy-hw-nvidia-drm-card"
+  local pipe = io.popen("'" .. detector:gsub("'", "'\\''") .. "' 2>/dev/null")
   if pipe then
     local card = (pipe:read("*a") or ""):match("^(/dev/dri/card%d+)")
     pipe:close()
