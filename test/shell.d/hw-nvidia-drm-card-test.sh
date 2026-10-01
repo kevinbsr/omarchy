@@ -29,10 +29,13 @@ hw_nvidia_drm_card() {
   OMARCHY_DRM_CLASS_PATH="$tmp_dir/drm" "$ROOT/bin/omarchy-hw-nvidia-drm-card"
 }
 
+# Pinning prints the card and exits 0; anything else prints nothing and exits 1.
 assert_card() {
-  local description="$1" expected="$2" actual=""
-  actual=$(hw_nvidia_drm_card) || actual=""
+  local description="$1" expected="$2" actual="" status=0 expected_status=1
+  actual=$(hw_nvidia_drm_card) || status=$?
+  [[ -n $expected ]] && expected_status=0
   [[ $actual == "$expected" ]] || fail "$description" "expected: '$expected', actual: '$actual'"
+  (( status == expected_status )) || fail "$description" "expected exit $expected_status, got $status"
   pass "$description"
 }
 
