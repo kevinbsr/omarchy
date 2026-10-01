@@ -13,7 +13,8 @@
 # Prints nothing and exits 1 unless exactly one NVIDIA card, no other GPU card
 # and at least one firmware framebuffer card are present, so every other
 # machine keeps Aquamarine's autodetection. A second NVIDIA card would be left
-# out of the pin with its outputs dark, so it counts as another GPU.
+# out of the pin with its outputs dark, and one with no connectors (modeset=0)
+# cannot drive a display, so either counts as another GPU.
 #
 # The card is matched by the driver of its own device, not through udev links
 # or DRIVERS== matches: the firmware framebuffer is a child of the GPU's PCI
@@ -34,7 +35,8 @@ for card in "$drm_class_path"/card[0-9]*; do
 
   case $driver in
     nvidia)
-      if [[ -n $nvidia_card ]]; then
+      connectors=("$card"-*)
+      if [[ -n $nvidia_card ]] || (( ${#connectors[@]} == 0 )); then
         other_gpu=true
       else
         nvidia_card="/dev/dri/$name"

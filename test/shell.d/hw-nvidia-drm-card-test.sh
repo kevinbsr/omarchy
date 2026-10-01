@@ -39,19 +39,22 @@ assert_card() {
 write_drm card0:simple-framebuffer card1:nvidia card1-DP-1 card1-eDP-1
 assert_card "NVIDIA beside simpledrm is pinned, connectors are ignored" /dev/dri/card1
 
-write_drm card0:nvidia card1:efi-framebuffer
+write_drm card0:nvidia card0-HDMI-A-1 card1:efi-framebuffer
 assert_card "any firmware framebuffer driver counts" /dev/dri/card0
 
-write_drm card0:nvidia
+write_drm card0:nvidia card0-DP-1
 assert_card "NVIDIA alone keeps autodetection" ""
 
-write_drm card0:simple-framebuffer card1:amdgpu card2:nvidia
+write_drm card0:simple-framebuffer card1:amdgpu card2:nvidia card2-DP-1
 assert_card "a hybrid machine keeps autodetection" ""
 
-write_drm card0:simple-framebuffer card1:nvidia card2:nvidia
+write_drm card0:simple-framebuffer card1:nvidia card1-DP-1 card2:nvidia card2-DP-2
 assert_card "two NVIDIA cards keep autodetection" ""
 
-write_drm card0:amdgpu card1:nvidia
+write_drm card0:simple-framebuffer card1:nvidia
+assert_card "NVIDIA without connectors (modeset=0) keeps autodetection" ""
+
+write_drm card0:amdgpu card1:nvidia card1-DP-1
 assert_card "a hybrid machine without a firmware framebuffer keeps autodetection" ""
 
 write_drm card0:simple-framebuffer card1:i915
